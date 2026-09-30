@@ -1,0 +1,15 @@
+{
+  "name": "Coração do Rapha",
+  "short_name": "Coração",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0d1b2a",
+  "theme_color": "#1b263b",
+  "icons": [
+    {
+      "src": "Foto do Raphael.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ]
+}

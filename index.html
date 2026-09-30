@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coração do Rapha | O Jogo</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;1,400&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="summer-forever.mp3" type="audio/mpeg">
+    </audio>
+
+    <audio id="tension-sound">
+        <source src="tension.mp3" type="audio/mpeg">
+    </audio>
+
+    <!-- BOTÃO FLUTUANTE DE ÁUDIO -->
+    <button class="floating-audio-btn" onclick="toggleQuickVolumeModal()" title="Configurar Som">
+        <i class="fa-solid fa-sliders"></i>
+    </button>
+
+    <!-- MODAL RÁPIDO DE VOLUME -->
+    <div id="volume-modal" class="quick-volume-modal">
+        <p><i class="fa-solid fa-volume-high"></i> Ajustar Volume</p>
+        <input type="range" min="0" max="1" step="0.05" value="0.4" onchange="mudarVolume(this.value)">
+    </div>
+
+    <div class="glass-card" id="card-principal">
+        
+        <!-- 🎮 MENU PRINCIPAL -->
+        <div id="menu-principal">
+            <div class="game-logo">
+                <i class="fa-solid fa-film"></i>
+            </div>
+            <h2>Coração do Rapha</h2>
+            <p class="subtitulo">A Edição Definitiva de Verão</p>
+            
+            <div class="settings-container">
+                <div class="setting-block">
+                    <label><i class="fa-solid fa-palette"></i> Paleta Visual (Aesthetic)</label>
+                    <select id="tema-cores" class="game-select" onchange="mudarTema(this.value)">
+                        <option value="crepusculo">Crepúsculo na Lombardia (Azul Melancólico)</option>
+                        <option value="verao">Verão Solar de 1983 (Terracotta & Ouro)</option>
+                    </select>
+                </div>
+
+                <div class="setting-block">
+                    <label><i class="fa-solid fa-music"></i> Volume da Trilha Sonora</label>
+                    <input type="range" min="0" max="1" step="0.05" value="0.4" onchange="mudarVolume(this.value)">
+                </div>
+
+                <div class="setting-block">
+                    <label><i class="fa-solid fa-heart-pulse"></i> Modo de Jogo</label>
+                    <select id="nivel-romance" class="game-select">
+                        <option value="melancolico">Muito Romântico (CMBYN Mode)</option>
+                        <option value="zoeira">Normal (Com direito a zoação)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="menu-botoes">
+                <button class="btn" onclick="irParaBoasVindas()">
+                    <i class="fa-solid fa-play"></i> Iniciar Verão
+                </button>
+                <button class="btn btn-secundario" onclick="irParaTimeline()">
+                    <i class="fa-solid fa-hourglass-half"></i> Linha do Tempo
+                </button>
+                <button class="btn btn-secundario" onclick="mostrarSobre()">
+                    <i class="fa-solid fa-circle-info"></i> Créditos
+                </button>
+            </div>
+        </div>
+
+        <!-- 📜 TELA DE LINHA DO TEMPO (MEMÓRIAS REAIS) -->
+        <div id="timeline-section">
+            <h2 style="font-family: 'Playfair Display', serif;"><i class="fa-solid fa-hourglass-half"></i> Nossas Memórias</h2>
+            <p class="subtitulo">Os capítulos reais da nossa história...</p>
+            
+            <div class="timeline-scroll">
+                <div class="timeline-item">
+                    <span class="timeline-date">31/08/2025</span>
+                    <h4>A Festa na Musiva</h4>
+                    <p>Onde tudo começou de forma caótica e divertida: nós dois bem bêbados ficando pela primeira vez.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">01/09/2025</span>
+                    <h4>Primeira Mensagem</h4>
+                    <p>O dia em que te mandei mensagem pelo Instagram desejando feliz aniversário e puxando assunto.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">16/09/2025</span>
+                    <h4>Nosso Primeiro Encontro</h4>
+                    <p>No meu aniversário, quando não tinha mais ninguém para sair comigo e você aceitou o convite.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">09/12/2025</span>
+                    <h4>O Pedido de Namoro Oficial</h4>
+                    <p>O momento em que oficializamos o que o coração de ambos já sabia e sentia.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">08/02/2026</span>
+                    <h4>A Despedida</h4>
+                    <p>O último dia em que nos vimos antes de você ir para o intercâmbio (e a saudade apertar).</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">11/07/2026</span>
+                    <h4>O Retorno do Intercâmbio</h4>
+                    <p>O dia em que você voltou e eu estava absolutamente surtando de ansiedade para te ver.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">12/07/2026</span>
+                    <h4>O Reencontro</h4>
+                    <p>Finalmente nos reencontramos e, desde aquele instante, eu decidi que não ia mais te soltar.</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">11/08/2026 a 13/08/2026</span>
+                    <h4>Viagem ao Rio & Show da Rosalía</h4>
+                    <p>Uma das viagens mais divertidas e inesquecíveis das nossas vidas. Pura energia e risadas!</p>
+                </div>
+                <div class="timeline-item">
+                    <span class="timeline-date">09/12/2026</span>
+                    <h4>1 Ano de Namoro</h4>
+                    <p>A celebração oficial do nosso contrato de posse vitalícia e irrevogável! 🔐❤️</p>
+                </div>
+            </div>
+
+            <button class="btn btn-secundario" onclick="voltarMenuTimeline()" style="margin-top: 20px;"><i class="fa-solid fa-arrow-left"></i> Voltar ao Menu</button>
+        </div>
+
+        <!-- TELA DE BOAS-VINDAS -->
+        <div id="boas-vindas-section">
+            <img src="Foto do Raphael.png" alt="Foto do Rapha" class="foto-perfil">
+            <h2>Bem-vindo ao Coração! ❤️</h2>
+            <p class="subtitulo">Um ambiente altamente restrito, exclusivo e protegido por muito amor.</p>
+            <button class="btn" onclick="irParaCadastro()">Avançar <i class="fa-solid fa-arrow-right"></i></button>
+        </div>
+
+        <!-- TELA DE CADASTRO -->
+        <div id="cadastro-section">
+            <h2><i class="fa-solid fa-heart-pulse"></i> Formulário de Moradia</h2>
+            <p class="subtitulo">Preencha os dados abaixo para solicitar um espacinho no meu coração.</p>
+            
+            <div class="input-group">
+                <input type="text" id="nome-inquilino" placeholder="Seu nome (Dica: começa com Rafa...)">
+                <i class="fa-solid fa-signature icon-left"></i>
+            </div>
+            
+            <div class="input-group">
+                <input type="text" id="motivo" placeholder="Por que você merece morar aqui?">
+                <i class="fa-solid fa-comment-dots icon-left"></i>
+            </div>
+            
+            <button class="btn" id="btn-cadastro" onclick="tentarCadastro()">Enviar Solicitação <i class="fa-solid fa-paper-plane"></i></button>
+            <div class="feedback" id="cadastro-erro">Preencha todos os campos, meu bem! 🛑</div>
+        </div>
+
+        <!-- TELA DE EXPULSÃO (TERROR) -->
+        <div id="expulsao-section">
+            <i class="fa-solid fa-ban icon-destaque" style="color: var(--error);"></i>
+            <h2>Acesso Negado! 🛑</h2>
+            <p class="texto-revelacao">
+                ALERTA DE INVASOR! O nome digitado não corresponde ao dono do meu coração. 
+            </p>
+            <p class="subtitulo">A propriedade "Coração do Rapha" é de uso exclusivo do <strong>Rafael</strong>. Retire-se imediatamente ou a polícia dos namorados será acionada!</p>
+            <button class="btn" style="background: var(--error);" onclick="voltarCadastro()">Tentar Novamente <i class="fa-solid fa-rotate-left"></i></button>
+        </div>
+
+        <!-- TELA DE REVELAÇÃO -->
+        <div id="revelacao-section">
+            <i class="fa-solid fa-heart-circle-check icon-destaque"></i>
+            <h2>Aviso do Sistema! 🚨</h2>
+            <p class="texto-revelacao">
+                Analisamos sua ficha, <strong>Rafael</strong> (nascido em 01/09/2005, ostentando os mesmos 21 aninhos que eu).<br><br>
+                Sua solicitação foi <strong>RECUSADA</strong>.<br><br>
+                O motivo? O sistema acusa que você já possui <em>Posse Vitalícia e Propriedade Exclusiva</em> de tudo aqui dentro!<br><br>
+                E que venha o dia <strong>09/12/2026</strong> para celebrarmos nosso 1º ano desse contrato irrevogável! 🔐❤
+            </p>
+            <button class="btn" onclick="verificarIdentidade()">Assumir Minha Propriedade <i class="fa-solid fa-key"></i></button>
+        </div>
+
+        <!-- TELA DE AVISO (VERIFICAÇÃO) -->
+        <div id="aviso-section">
+            <i class="fa-solid fa-shield-heart icon-destaque"></i>
+            <h2>Alto lá! 🕵‍♂️</h2>
+            <p class="texto-revelacao">
+                Como essa propriedade tem um valor inestimável, precisamos garantir que você é o verdadeiro <strong>Rafael</strong> e não um impostor querendo roubar meu coração.
+            </p>
+            <p class="subtitulo">Responda ao questionário de segurança a seguir para liberar o acesso.</p>
+            <button class="btn" onclick="iniciarQuiz()">Iniciar Verificação <i class="fa-solid fa-clipboard-check"></i></button>
+        </div>
+
+        <!-- TELA DO QUIZ -->
+        <div id="quiz-section">
+            <div class="progress-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            
+            <div class="pergunta-header">
+                <span class="badge" id="contador-perguntas">Pergunta 1 de 14</span>
+                <h2 id="pergunta-texto">Carregando pergunta...</h2>
+                <div id="pergunta-dica" class="dica-secreta"></div>
+            </div>
+            
+            <div class="opcoes" id="opcoes-container"></div>
+            <div class="feedback" id="mensagem-erro">Ops, errou! Tenta de novo, amor! 💔</div>
+        </div>
+
+        <!-- TELA FINAL -->
+        <div class="tela-final" id="tela-final">
+            <div class="certificado-card">
+                <div class="selo-oficial"><i class="fa-solid fa-certificate"></i></div>
+                <h2>Certificado de Propriedade</h2>
+                <p class="subtitulo-cert">Contrato Vitalício & Irrevogável</p>
+                
+                <p class="texto-certificado">
+                    Certificamos para os devidos fins que <strong>Rafael</strong> concluiu com sucesso todas as etapas, provou sua identidade e assumiu a posse exclusiva e eterna do meu coração.<br><br>
+                    <em>Validade: Para todo o sempre (com vigência oficial a partir de 09/12/2026).</em>
+                </p>
+
+                <div class="emergency-box">
+                    <h3><i class="fa-solid fa-phone-volume"></i> Linha Direta de Emergência</h3>
+                    <p>Caso sinta saudades, solidão ou precise de um abraço urgente, disque direto para a central oficial:</p>
+                    <a href="https://wa.me/5565999501609?text=Oi%20amor,%20terminei%20o%20jogo%20e%20estou%20sentindo%20saudades!%20❤" target="_blank" class="btn-emergency">
+                        <i class="fa-brands fa-whatsapp"></i> Chamar o Amor no WhatsApp
+                    </a>
+                    <span class="numero-aviso">Disponível 24h por dia. Atendimento obrigatório e carinhoso. 🍑✨</span>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
