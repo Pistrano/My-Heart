@@ -2,7 +2,16 @@
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="description" content="Coração do Rapha: um jogo-surpresa feito com amor (PWA).">
+    <meta name="theme-color" content="#1b263b">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="Coração">
+    <link rel="icon" href="img/icon-192.png">
+    <link rel="apple-touch-icon" href="img/icon-192.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <title>Coração do Rapha | O Jogo</title>
     
     <link rel="manifest" href="manifest.json">
@@ -26,14 +35,14 @@
 </audio>
 
     <!-- BOTÃO FLUTUANTE DE ÁUDIO -->
-    <button class="floating-audio-btn" onclick="toggleQuickVolumeModal()" title="Configurar Som">
+    <button class="floating-audio-btn" onclick="toggleQuickVolumeModal()" title="Configurar Som" aria-label="Configurar som e volume">
         <i class="fa-solid fa-sliders"></i>
     </button>
 
     <!-- MODAL RÁPIDO DE VOLUME -->
     <div id="volume-modal" class="quick-volume-modal">
         <p><i class="fa-solid fa-volume-high"></i> Ajustar Volume</p>
-        <input type="range" min="0" max="1" step="0.05" value="0.4" onchange="mudarVolume(this.value)">
+        <input type="range" min="0" max="1" step="0.05" value="0.4" oninput="mudarVolume(this.value)" aria-label="Volume da música">
     </div>
 
     <div class="glass-card" id="card-principal">
@@ -57,7 +66,7 @@
 
                 <div class="setting-block">
                     <label><i class="fa-solid fa-music"></i> Volume da Trilha Sonora</label>
-                    <input type="range" min="0" max="1" step="0.05" value="0.4" onchange="mudarVolume(this.value)">
+                    <input type="range" min="0" max="1" step="0.05" value="0.4" oninput="mudarVolume(this.value)" aria-label="Volume da música">
                 </div>
 
                 <div class="setting-block">
@@ -140,7 +149,7 @@
 
         <!-- TELA DE BOAS-VINDAS -->
         <div id="boas-vindas-section">
-            <img src="Foto do Raphael.png" alt="Foto do Rapha" class="foto-perfil">
+            <img src="img/rapha.webp" width="145" height="145" alt="Foto do Rapha" class="foto-perfil">
             <h2>Bem-vindo ao Coração! ❤️</h2>
             <p class="subtitulo">Um ambiente altamente restrito, exclusivo e protegido por muito amor.</p>
             <button class="btn" onclick="irParaCadastro()">Avançar <i class="fa-solid fa-arrow-right"></i></button>
@@ -241,6 +250,6 @@
 
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js" charset="utf-8"></script>
 </body>
 </html>

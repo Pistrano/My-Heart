@@ -13,15 +13,23 @@ const somTensao = document.getElementById('tension-sound');
 const volumeModal = document.getElementById('volume-modal');
 const perguntaDica = document.getElementById('pergunta-dica');
 
+// Armazenamento seguro (não quebra em modo privado)
+const store = {
+    get(k, padrao) { try { const v = localStorage.getItem(k); return v === null ? padrao : v; } catch { return padrao; } },
+    set(k, v) { try { localStorage.setItem(k, v); } catch { /* ignora */ } }
+};
+let volumeAtual = Math.min(1, Math.max(0, parseFloat(store.get('rapha:volume', '0.4')) || 0.4));
+
 // Inicia com animação de slide-up
 menuPrincipal.style.display = 'block';
 menuPrincipal.style.opacity = '1';
 menuPrincipal.classList.add('fade-in-up');
 
-let temaAtual = 'crepusculo';
+let temaAtual = store.get('rapha:tema', 'crepusculo');
 
 function mudarTema(tema) {
     temaAtual = tema;
+    store.set('rapha:tema', tema);
     if (tema === 'verao') {
         document.body.classList.add('theme-verao');
     } else {
@@ -34,9 +42,13 @@ function toggleQuickVolumeModal() {
 }
 
 function mudarVolume(valor) {
-    musicaFundo.volume = valor;
-    if (musicaFundo.paused && valor > 0) {
-        musicaFundo.play().catch(e => console.log("Áudio aguardando interação"));
+    volumeAtual = Math.min(1, Math.max(0, parseFloat(valor)));
+    musicaFundo.volume = volumeAtual;
+    store.set('rapha:volume', volumeAtual);
+    // mantém os dois sliders (menu e botão flutuante) sincronizados
+    document.querySelectorAll('input[type="range"]').forEach(r => { r.value = volumeAtual; });
+    if (musicaFundo.paused && volumeAtual > 0) {
+        musicaFundo.play().catch(() => console.log("Áudio aguardando interação"));
     }
 }
 
@@ -65,6 +77,7 @@ function tentarCadastro() {
     const motivo = document.getElementById('motivo').value.trim();
     const erro = document.getElementById('cadastro-erro');
     const btn = document.getElementById('btn-cadastro');
+    if (btn.disabled) return; // evita envio duplo (Enter + clique)
 
     if (nome === "" || motivo === "") {
         mostrarErro(erro);
@@ -113,12 +126,15 @@ function voltarCadastro() {
 }
 
 function verificarIdentidade() {
-    musicaFundo.volume = 0.4; 
+    musicaFundo.volume = volumeAtual;
     musicaFundo.play().catch(error => console.log("Áudio bloqueado pelo navegador."));
     transicaoSuave(revelacaoSection, avisoSection);
 }
 
 function iniciarQuiz() {
+    // retoma de onde parou, se ele fechou o app no meio do quiz
+    const salvo = parseInt(store.get('rapha:quiz', '0'), 10);
+    indiceAtual = (salvo > 0 && salvo < perguntas.length) ? salvo : 0;
     transicaoSuave(avisoSection, quizSection, carregarPergunta);
 }
 
@@ -343,14 +359,14 @@ function assinarEGuardarRecordacao() {
                 <h2 style="color:var(--primary); font-size: 1.4rem; margin-bottom: 5px; font-family: 'Playfair Display', serif;">Contrato Homologado! 📜</h2>
                 <p style="font-size: 0.8rem; color: var(--text-light); margin-bottom: 15px;">Vigência até 09/12/2026 (1 Ano de Namoro)</p>
                 
-                <img src="Foto Casal.png" alt="Nossa Foto" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent); margin-bottom: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); filter: sepia(10%);">
+                <img src="img/casal.webp" alt="Nossa Foto" style="width: 140px; height: 140px; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent); margin-bottom: 15px; box-shadow: 0 8px 25px rgba(0,0,0,0.3); filter: sepia(10%);">
                 
                 <p style="font-size: 0.9rem; color: var(--text-main); line-height: 1.5; margin-bottom: 25px;">
                     Assinatura verificada em cartório pelo nosso amor! Você já pode salvar este termo oficial de recordação no seu tablet.
                 </p>
 
                 <div style="display: flex; flex-direction: column; gap: 12px;">
-                    <button onclick="window.print()" style="display: flex; justify-content: center; align-items: center; gap: 10px; background: #2b2d42; color: var(--accent); border: 2px solid var(--accent); padding: 14px; border-radius: 14px; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif;"><i class="fa-solid fa-download"></i> Salvar no Tablet</button>
+                    <button onclick="window.print()" style="display: flex; justify-content: center; align-items: center; gap: 10px; background: #2b2d42; color: var(--accent); border: 2px solid var(--accent); padding: 14px; border-radius: 14px; cursor: pointer; font-weight: 600; font-family: 'Poppins', sans-serif;"><i class="fa-solid fa-download"></i> Salvar como PDF</button>
                     
                     <button onclick="document.getElementById('modal-recordacao').remove(); avancarPergunta();" style="display: flex; justify-content: center; align-items: center; gap: 10px; background: linear-gradient(135deg, var(--accent), var(--accent-hover)); color: var(--primary-dark); border: none; padding: 14px; border-radius: 14px; cursor: pointer; font-weight: 700; font-family: 'Poppins', sans-serif;"><i class="fa-solid fa-wand-magic-sparkles"></i> Continuar Aventura</button>
                 </div>
@@ -403,6 +419,7 @@ function mostrarZoeiraSerie() {
 
 function avancarPergunta() {
     indiceAtual++;
+    store.set('rapha:quiz', indiceAtual);
     if (indiceAtual < perguntas.length) {
         carregarPergunta();
     } else {
@@ -417,24 +434,29 @@ function mostrarErro(elementoMensagem) {
 }
 
 // ==== TRANSIÇÃO DESLIZANTE CINEMATOGRÁFICA ====
+let emTransicao = false;
 function transicaoSuave(esconder, mostrar, callback = null) {
+    if (emTransicao) return; // ignora cliques durante a animação
+    emTransicao = true;
     esconder.style.opacity = '0';
     setTimeout(() => {
         esconder.style.display = 'none';
-        esconder.classList.remove('fade-in-up'); // Limpa a classe do antigo
-        
+        esconder.classList.remove('fade-in-up');
+
         mostrar.style.display = 'block';
-        mostrar.classList.add('fade-in-up'); // Adiciona o slide-up no novo
-        
-        void mostrar.offsetWidth; 
+        mostrar.classList.add('fade-in-up');
+
+        void mostrar.offsetWidth;
         mostrar.style.opacity = '1';
-        
-        if(callback) callback();
+        emTransicao = false;
+
+        if (callback) callback();
     }, 400);
 }
 
 function finalizarQuiz() {
     progressBar.style.width = '100%';
+    store.set('rapha:quiz', 0);
     setTimeout(() => {
         transicaoSuave(quizSection, telaFinal, soltarConfetes);
     }, 600);
@@ -464,3 +486,38 @@ document.addEventListener('click', (e) => {
         }
     }
 });
+
+// ==== INICIALIZAÇÃO (restaura tema e volume salvos) ====
+document.getElementById('tema-cores').value = temaAtual;
+mudarTema(temaAtual);
+musicaFundo.volume = volumeAtual;
+document.querySelectorAll('input[type="range"]').forEach(r => { r.value = volumeAtual; });
+
+// Fecha o painel de volume ao clicar fora ou apertar Esc
+document.addEventListener('click', (e) => {
+    if (volumeModal.style.display === 'block' && !e.target.closest('#volume-modal, .floating-audio-btn')) {
+        volumeModal.style.display = 'none';
+    }
+});
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') volumeModal.style.display = 'none';
+    if (e.key !== 'Enter') return;
+    const id = e.target.id;
+    if (id === 'nome-inquilino' || id === 'motivo') tentarCadastro();
+    else if (id === 'input-assinatura') validarEAssinarContrato();
+});
+
+// Pausa a música quando o app vai para segundo plano e retoma ao voltar
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        if (!musicaFundo.paused) { musicaFundo.dataset.retomar = '1'; musicaFundo.pause(); }
+    } else if (musicaFundo.dataset.retomar === '1') {
+        musicaFundo.dataset.retomar = '';
+        musicaFundo.play().catch(() => {});
+    }
+});
+
+// Service Worker (torna o PWA instalável e offline)
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
+}
