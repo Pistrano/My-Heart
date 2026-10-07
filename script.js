@@ -213,7 +213,7 @@ const perguntas = [
         resposta: "No meu aniversário, porque não tinha mais ninguém para sair comigo e você aceitou" 
     },
     { 
-        pergunta: "Onde foi que você me pediu em namoro oficial?", 
+        pergunta: "Onde foi que eu, Raphael, te pedi em namoro oficial?", 
         opcoes: ["Num restaurante", "Na frente da faculdade", "No carro no seu condomínio"], 
         resposta: "No carro no seu condomínio" 
     },
@@ -258,12 +258,12 @@ const perguntas = [
         resposta: "K." 
     },
     { 
-        pergunta: "Em qual faculdade o Rafael estuda Engenharia de Software?", 
+        pergunta: "Em qual faculdade eu, Raphael, faço Engenharia de Software?", 
         opcoes: ["UFMT", "Univag", "Unic"], 
         resposta: "Univag" 
     },
     { 
-        pergunta: "Em qual instituição o Rafael faz o estágio atualmente?", 
+        pergunta: "Em qual instituição eu, Raphael, trabalho/estágio atualmente?", 
         opcoes: ["CREA-MT", "Ginco", "Jusbrasil"], 
         resposta: "CREA-MT" 
     },
@@ -365,8 +365,8 @@ function mostrarContratoOverwatch() {
                 
                 <div style="font-size: 0.85rem; color: var(--text-main); line-height: 1.6; text-align: left; background: rgba(27, 38, 59, 0.05); padding: 18px; border-radius: 12px; border: 1px solid rgba(194, 166, 68, 0.3); margin-bottom: 20px;">
                     <strong style="color: var(--primary);">PARTES ENVOLVIDAS:</strong><br>
-                    • <strong>Contratante (Vítima da Mira):</strong> Raphael Capistrano Enore da Silva<br>
-                    • <strong>Contratado (Suporte Titular):</strong> O Namorado<br><br>
+                    • <strong>Contratante (Vítima da Mira):</strong> Rafael, dono oficial do coração<br>
+                    • <strong>Contratado (Suporte Titular):</strong> Raphael, namorado e apoio emocional registrado<br><br>
                     <strong style="color: var(--primary);">CLÁUSULAS JURÍDICAS:</strong><br>
                     <strong>1ª</strong> O Contratante obriga-se irrevogavelmente a manter o apoio emocional incondicional mesmo após derrotas humilhantes.<br><br>
                     <strong>2ª</strong> Fica expressamente vedado o uso de termos ofensivos no chat de voz.<br><br>
@@ -375,7 +375,7 @@ function mostrarContratoOverwatch() {
 
                 <div style="text-align: left; margin-bottom: 20px;">
                     <label style="font-size: 0.8rem; color: var(--primary); font-weight: 600; display: block; margin-bottom: 5px;">Assinatura Digital Obrigatória:</label>
-                    <input type="text" id="input-assinatura" placeholder="Ex: Raphael Capistrano..." style="width: 100%; padding: 12px; border: 2px solid var(--accent); border-radius: 10px; font-family: 'Playfair Display', serif; font-size: 0.95rem; outline: none; background: #fff;">
+                    <input type="text" id="input-assinatura" placeholder="Ex: Rafael..." style="width: 100%; padding: 12px; border: 2px solid var(--accent); border-radius: 10px; font-family: 'Playfair Display', serif; font-size: 0.95rem; outline: none; background: #fff;">
                     <div id="erro-assinatura" style="color: var(--error); font-size: 0.8rem; margin-top: 5px; display: none;">Por favor, assine o documento para prosseguir, Excelência! ✍️</div>
                 </div>
 

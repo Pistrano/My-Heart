@@ -11,6 +11,7 @@
     --card-bg: rgba(246, 243, 237, 0.96);
     --decor-icon: '🍂';
     --shadow-card: 0 30px 90px rgba(5, 10, 20, 0.6);
+    --panel-border: rgba(194, 166, 68, 0.4);
 }
 
 body.theme-verao {
@@ -26,6 +27,7 @@ body.theme-verao {
     --card-bg: rgba(254, 250, 246, 0.95);
     --decor-icon: '🍑';
     --shadow-card: 0 30px 90px rgba(50, 25, 10, 0.4);
+    --panel-border: rgba(221, 161, 94, 0.48);
 }
 
 * {
@@ -137,7 +139,7 @@ body::after { bottom: 8%; right: 12%; animation-delay: 7s; }
     background: var(--card-bg);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 2px solid rgba(194, 166, 68, 0.4);
+    border: 2px solid var(--panel-border);
     width: 92%;
     max-width: 560px;
     max-height: min(88vh, 820px);
@@ -151,6 +153,15 @@ body::after { bottom: 8%; right: 12%; animation-delay: 7s; }
     z-index: 1;
     transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
     scrollbar-gutter: stable;
+}
+
+.glass-card::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(194, 166, 68, 0.22);
+    border-radius: 24px;
+    pointer-events: none;
 }
 
 /* Escondendo visualmente o scroll mas permitindo rolagem */
@@ -355,6 +366,106 @@ button, .btn-emergency { -webkit-tap-highlight-color: transparent; touch-action:
 
 @media (display-mode: standalone) {
     .btn-install { display: none !important; }
+}
+
+@media (min-width: 720px) and (min-height: 680px) {
+    body {
+        padding: max(28px, env(safe-area-inset-top)) max(28px, env(safe-area-inset-right)) max(28px, env(safe-area-inset-bottom)) max(28px, env(safe-area-inset-left));
+    }
+
+    .glass-card {
+        width: min(92vw, 860px);
+        max-width: 860px;
+        min-height: min(76dvh, 760px);
+        max-height: min(90dvh, 900px);
+        padding: 54px 58px;
+        border-radius: 36px;
+    }
+
+    .glass-card::before {
+        inset: 18px;
+        border-radius: 28px;
+    }
+
+    .game-logo {
+        font-size: 4.2rem;
+        margin-bottom: 12px;
+    }
+
+    h2 {
+        font-size: 2.28rem;
+    }
+
+    .subtitulo {
+        font-size: 1.04rem;
+    }
+
+    .settings-container {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 16px;
+        align-items: stretch;
+    }
+
+    .setting-block:first-child {
+        grid-column: 1 / -1;
+    }
+
+    .menu-botoes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 14px;
+    }
+
+    .menu-botoes .btn:first-child,
+    .menu-botoes .btn-continue {
+        grid-column: 1 / -1;
+    }
+
+    .btn, .btn-secundario, .btn-opcao, .btn-emergency {
+        min-height: 60px;
+        font-size: 1.02rem;
+    }
+
+    .timeline-scroll {
+        max-height: 520px;
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        align-items: start;
+        gap: 16px 18px;
+    }
+
+    .timeline-scroll::before {
+        display: none;
+    }
+
+    .timeline-item {
+        height: 100%;
+        margin-left: 0;
+        border-radius: 18px;
+        padding: 18px 20px;
+    }
+
+    .timeline-item::after {
+        display: none;
+    }
+
+    #quiz-section .opcoes {
+        display: grid;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #quiz-section .btn-opcao {
+        height: 100%;
+        align-items: center;
+    }
+
+    .texto-certificado,
+    .emergency-box {
+        max-width: 640px;
+        margin-left: auto;
+        margin-right: auto;
+    }
 }
 
 @media (max-width: 640px) {

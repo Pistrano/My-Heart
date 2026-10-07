@@ -1,5 +1,5 @@
 // Troque a VERSAO a cada deploy para forçar a atualização do cache.
-const VERSAO = 'v3';
+const VERSAO = 'v4';
 const CACHE = `coracao-${VERSAO}`;
 const NUCLEO = ['./', 'index.html', 'style.css', 'script.js', 'manifest.json',
     'img/rapha.webp', 'img/casal.webp', 'img/icon-192.png', 'img/icon-512.png',
