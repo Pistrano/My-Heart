@@ -1,0 +1,51 @@
+{
+  "name": "coracao-do-rapha",
+  "version": "1.0.0",
+  "description": "Coração do Rapha em formato de aplicativo desktop.",
+  "main": "electron/main.js",
+  "private": true,
+  "author": "Raphael",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder --win",
+    "build:portable": "electron-builder --win portable",
+    "build:installer": "electron-builder --win nsis"
+  },
+  "devDependencies": {
+    "electron": "^38.2.2",
+    "electron-builder": "^26.0.12"
+  },
+  "build": {
+    "appId": "com.raphael.coracaodorapha",
+    "productName": "Coração do Rapha",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "index.html",
+      "style.css",
+      "script.js",
+      "manifest.json",
+      "sw.js",
+      "click.mp3",
+      "summer-forever.mp3",
+      "tension.mp3",
+      "img/**/*",
+      "electron/**/*"
+    ],
+    "win": {
+      "icon": "img/icon-512.png",
+      "target": [
+        "nsis",
+        "portable"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Coração do Rapha"
+    }
+  }
+}
