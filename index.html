@@ -5,11 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="description" content="Coração do Rapha: um jogo-surpresa feito com amor (PWA).">
     <meta name="theme-color" content="#1b263b">
+    <meta name="color-scheme" content="light">
+    <meta name="format-detection" content="telephone=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Coração">
     <link rel="icon" href="img/icon-192.png">
     <link rel="apple-touch-icon" href="img/icon-192.png">
+    <link rel="preload" href="img/rapha.webp" as="image">
+    <link rel="preload" href="img/casal.webp" as="image">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <title>Coração do Rapha | O Jogo</title>
@@ -82,13 +87,23 @@
                 <button class="btn" onclick="irParaBoasVindas()">
                     <i class="fa-solid fa-play"></i> Iniciar Verão
                 </button>
+                <button class="btn btn-continue" id="btn-continuar" onclick="continuarJogo()">
+                    <i class="fa-solid fa-forward-step"></i> Continuar de Onde Parei
+                </button>
                 <button class="btn btn-secundario" onclick="irParaTimeline()">
                     <i class="fa-solid fa-hourglass-half"></i> Linha do Tempo
+                </button>
+                <button class="btn btn-secundario btn-install" id="btn-install" onclick="instalarApp()">
+                    <i class="fa-solid fa-mobile-screen-button"></i> Instalar App
+                </button>
+                <button class="btn btn-secundario btn-reset" id="btn-reset" onclick="reiniciarProgresso()">
+                    <i class="fa-solid fa-arrow-rotate-left"></i> Reiniciar Progresso
                 </button>
                 <button class="btn btn-secundario" onclick="mostrarSobre()">
                     <i class="fa-solid fa-circle-info"></i> Créditos
                 </button>
             </div>
+            <p class="app-status" id="app-status" aria-live="polite"></p>
         </div>
 
         <!-- 📜 TELA DE LINHA DO TEMPO (MEMÓRIAS REAIS) -->

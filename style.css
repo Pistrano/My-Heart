@@ -48,7 +48,10 @@ body {
     color: var(--text-main);
     transition: background 1.2s ease;
     position: relative;
+    padding: max(16px, env(safe-area-inset-top)) max(14px, env(safe-area-inset-right)) max(16px, env(safe-area-inset-bottom)) max(14px, env(safe-area-inset-left));
 }
+
+body::selection { background: var(--accent); color: var(--primary-dark); }
 
 @keyframes gradientBG {
     0% { background-position: 0% 50%; }
@@ -112,6 +115,18 @@ body::after { bottom: 8%; right: 12%; animation-delay: 7s; }
     width: 210px;
     backdrop-filter: blur(15px);
 }
+.quick-volume-modal::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    right: 18px;
+    width: 14px;
+    height: 14px;
+    background: var(--card-bg);
+    border-left: 2px solid var(--accent);
+    border-top: 2px solid var(--accent);
+    transform: rotate(45deg);
+}
 .quick-volume-modal p { font-size: 0.85rem; color: var(--primary); font-weight: 600; margin-bottom: 10px; }
 .quick-volume-modal input[type="range"] { width: 100%; accent-color: var(--accent); cursor: pointer; }
 
@@ -125,8 +140,8 @@ body::after { bottom: 8%; right: 12%; animation-delay: 7s; }
     border: 2px solid rgba(194, 166, 68, 0.4);
     width: 92%;
     max-width: 560px;
-    max-height: 88vh;
-    max-height: 88dvh;
+    max-height: min(88vh, 820px);
+    max-height: min(88dvh, 820px);
     overflow-y: auto;
     padding: 45px 40px;
     border-radius: 32px;
@@ -135,6 +150,7 @@ body::after { bottom: 8%; right: 12%; animation-delay: 7s; }
     position: relative;
     z-index: 1;
     transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    scrollbar-gutter: stable;
 }
 
 /* Escondendo visualmente o scroll mas permitindo rolagem */
@@ -162,6 +178,7 @@ body::after { bottom: 8%; right: 12%; animation-delay: 7s; }
 .setting-block label { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--primary); font-weight: 600; margin-bottom: 8px; }
 .game-select { width: 100%; padding: 12px; border: 2px solid rgba(194, 166, 68, 0.35); border-radius: 12px; background: #ffffff; color: var(--text-main); font-size: 0.9rem; outline: none; cursor: pointer; transition: 0.3s; }
 .game-select:focus { border-color: var(--accent); }
+.game-select, .input-group input, button { min-height: 48px; }
 
 /* =========================================
    ALINHAMENTO PERFEITO EM BOTÕES (FLEXBOX)
@@ -180,14 +197,21 @@ body::after { bottom: 8%; right: 12%; animation-delay: 7s; }
     width: 100%;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-family: 'Poppins', sans-serif;
+    line-height: 1.25;
+    min-height: 54px;
+    overflow-wrap: anywhere;
 }
 .btn i, .btn-secundario i, .btn-opcao i, .btn-emergency i { margin: 0; /* Remove margens antigas que deixavam torto */ }
 
 .btn { background: linear-gradient(135deg, var(--accent), #b39235); color: var(--primary-dark); box-shadow: 0 8px 25px rgba(194, 166, 68, 0.3); margin-top: 5px; }
 .btn:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(194, 166, 68, 0.45); filter: brightness(1.05); }
+.btn:disabled { opacity: 0.7; cursor: progress; transform: none; }
 
 .btn-secundario { background: var(--card-bg); color: var(--primary); border: 2px solid var(--primary); box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
 .btn-secundario:hover { background: var(--primary); color: var(--accent); border-color: var(--primary); transform: translateY(-2px); }
+.btn-continue, .btn-install { display: none; }
+.btn-reset { font-size: 0.95rem; }
+.app-status { min-height: 18px; margin-top: 14px; font-size: 0.78rem; color: var(--text-light); line-height: 1.35; }
 
 .menu-botoes, .opcoes { display: flex; flex-direction: column; gap: 12px; margin-top: 18px; }
 
@@ -230,6 +254,7 @@ body::after { bottom: 8%; right: 12%; animation-delay: 7s; }
 .timeline-date { font-size: 0.75rem; color: var(--accent); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; display: block; margin-bottom: 4px; }
 .timeline-item h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--primary); margin: 0 0 6px 0; }
 .timeline-item p { font-size: 0.85rem; color: var(--text-light); line-height: 1.5; margin: 0; }
+.timeline-item:hover { transform: translateX(3px); }
 
 /* Tipografia */
 h2 { font-family: 'Playfair Display', serif; font-weight: 700; margin-bottom: 12px; font-size: 1.9rem; color: var(--primary); letter-spacing: -0.3px; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -326,6 +351,74 @@ button, .btn-emergency { -webkit-tap-highlight-color: transparent; touch-action:
 
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+@media (display-mode: standalone) {
+    .btn-install { display: none !important; }
+}
+
+@media (max-width: 640px) {
+    body {
+        align-items: stretch;
+        overflow: auto;
+    }
+
+    .floating-audio-btn {
+        width: 48px;
+        height: 48px;
+        top: max(14px, env(safe-area-inset-top));
+        right: max(14px, env(safe-area-inset-right));
+    }
+
+    .quick-volume-modal {
+        top: max(72px, calc(env(safe-area-inset-top) + 66px));
+        right: max(14px, env(safe-area-inset-right));
+        width: min(220px, calc(100vw - 32px));
+    }
+
+    .glass-card {
+        width: 100%;
+        max-height: none;
+        min-height: calc(100dvh - 32px);
+        border-radius: 24px;
+        padding: 34px 22px;
+        margin: auto 0;
+    }
+
+    h2 {
+        font-size: 1.62rem;
+        line-height: 1.15;
+        flex-wrap: wrap;
+    }
+
+    .subtitulo,
+    .texto-revelacao,
+    .texto-certificado {
+        font-size: 0.92rem;
+    }
+
+    .timeline-scroll {
+        max-height: 52dvh;
+        padding-right: 4px;
+    }
+
+    .btn, .btn-secundario, .btn-opcao, .btn-emergency {
+        font-size: 0.96rem;
+        padding: 14px 15px;
+    }
+
+    .foto-perfil {
+        width: 126px;
+        height: 126px;
+    }
+}
+
+@media (max-width: 380px) {
+    .glass-card { padding: 30px 18px; border-radius: 20px; }
+    .game-logo { font-size: 3rem; }
+    h2 { font-size: 1.45rem; }
+    .setting-block { padding: 13px 14px; }
+    .btn, .btn-secundario, .btn-opcao, .btn-emergency { font-size: 0.9rem; }
 }
 
 /* "Salvar como PDF" imprime só a recordação */

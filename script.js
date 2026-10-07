@@ -12,6 +12,10 @@ const musicaFundo = document.getElementById('bg-music');
 const somTensao = document.getElementById('tension-sound');
 const volumeModal = document.getElementById('volume-modal');
 const perguntaDica = document.getElementById('pergunta-dica');
+const btnContinuar = document.getElementById('btn-continuar');
+const btnInstall = document.getElementById('btn-install');
+const appStatus = document.getElementById('app-status');
+let promptInstalacao = null;
 
 // Armazenamento seguro (não quebra em modo privado)
 const store = {
@@ -56,11 +60,59 @@ function mostrarSobre() {
     alert("Coração do Rapha - Edição Verão 1.0\nInspirado em 'Me Chama pelo Seu Nome'.\nCriado com todo o amor para o meu namorado! 🍑✨");
 }
 
+function atualizarBotoesMenu() {
+    const salvo = parseInt(store.get('rapha:quiz', '0'), 10);
+    const temProgresso = salvo > 0 && salvo < perguntas.length;
+    btnContinuar.style.display = temProgresso ? 'flex' : 'none';
+}
+
+function atualizarStatusApp() {
+    if (!appStatus) return;
+    if (!navigator.onLine) {
+        appStatus.innerText = 'Modo offline ativo. O verão continua salvo neste aparelho.';
+    } else if (window.matchMedia('(display-mode: standalone)').matches) {
+        appStatus.innerText = 'App instalado e pronto para abrir em tela cheia.';
+    } else if (promptInstalacao) {
+        appStatus.innerText = 'Dica: instale para abrir como aplicativo na tela inicial.';
+    } else {
+        appStatus.innerText = 'Tudo pronto para jogar. O progresso fica salvo neste aparelho.';
+    }
+}
+
+function continuarJogo() {
+    const salvo = parseInt(store.get('rapha:quiz', '0'), 10);
+    if (salvo > 0 && salvo < perguntas.length) {
+        indiceAtual = salvo;
+        transicaoSuave(menuPrincipal, quizSection, carregarPergunta);
+    }
+}
+
+function reiniciarProgresso() {
+    if (!confirm('Reiniciar o quiz salvo neste aparelho?')) return;
+    store.set('rapha:quiz', 0);
+    indiceAtual = 0;
+    atualizarBotoesMenu();
+    atualizarStatusApp();
+}
+
+async function instalarApp() {
+    if (!promptInstalacao) {
+        alert('Quando o navegador liberar a instalação, este botão aparece automaticamente. No iPhone/iPad, use Compartilhar > Adicionar à Tela de Início.');
+        return;
+    }
+    promptInstalacao.prompt();
+    await promptInstalacao.userChoice.catch(() => null);
+    promptInstalacao = null;
+    btnInstall.style.display = 'none';
+    atualizarStatusApp();
+}
+
 function irParaTimeline() {
     transicaoSuave(menuPrincipal, timelineSection);
 }
 
 function voltarMenuTimeline() {
+    atualizarBotoesMenu();
     transicaoSuave(timelineSection, menuPrincipal);
 }
 
@@ -420,6 +472,7 @@ function mostrarZoeiraSerie() {
 function avancarPergunta() {
     indiceAtual++;
     store.set('rapha:quiz', indiceAtual);
+    atualizarBotoesMenu();
     if (indiceAtual < perguntas.length) {
         carregarPergunta();
     } else {
@@ -457,12 +510,14 @@ function transicaoSuave(esconder, mostrar, callback = null) {
 function finalizarQuiz() {
     progressBar.style.width = '100%';
     store.set('rapha:quiz', 0);
+    atualizarBotoesMenu();
     setTimeout(() => {
         transicaoSuave(quizSection, telaFinal, soltarConfetes);
     }, 600);
 }
 
 function soltarConfetes() {
+    if (typeof confetti !== 'function') return;
     var duration = 4000; 
     var end = Date.now() + duration;
 
@@ -517,7 +572,26 @@ document.addEventListener('visibilitychange', () => {
     }
 });
 
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    promptInstalacao = e;
+    btnInstall.style.display = 'flex';
+    atualizarStatusApp();
+});
+
+window.addEventListener('appinstalled', () => {
+    promptInstalacao = null;
+    btnInstall.style.display = 'none';
+    atualizarStatusApp();
+});
+
+window.addEventListener('online', atualizarStatusApp);
+window.addEventListener('offline', atualizarStatusApp);
+
 // Service Worker (torna o PWA instalável e offline)
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
 }
+
+atualizarBotoesMenu();
+atualizarStatusApp();

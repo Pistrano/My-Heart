@@ -1,9 +1,9 @@
 // Troque a VERSAO a cada deploy para forçar a atualização do cache.
-const VERSAO = 'v2';
+const VERSAO = 'v3';
 const CACHE = `coracao-${VERSAO}`;
 const NUCLEO = ['./', 'index.html', 'style.css', 'script.js', 'manifest.json',
     'img/rapha.webp', 'img/casal.webp', 'img/icon-192.png', 'img/icon-512.png',
-    'click.mp3', 'tension.mp3', 'summer-forever.mp3'];
+    'img/icon-maskable-512.png', 'click.mp3', 'tension.mp3', 'summer-forever.mp3'];
 
 self.addEventListener('install', (e) => {
     e.waitUntil(caches.open(CACHE).then(c => c.addAll(NUCLEO)).then(() => self.skipWaiting()));
@@ -35,7 +35,8 @@ async function respostaParcial(req, res) {
 self.addEventListener('fetch', (e) => {
     const req = e.request;
     if (req.method !== 'GET') return;
-    const ehAudio = /\.mp3$/i.test(new URL(req.url).pathname);
+    const url = new URL(req.url);
+    const ehAudio = /\.mp3$/i.test(url.pathname);
 
     e.respondWith((async () => {
         const cache = await caches.open(CACHE);
@@ -43,6 +44,13 @@ self.addEventListener('fetch', (e) => {
 
         if (ehAudio && guardado) {
             return req.headers.has('range') ? respostaParcial(req, guardado) : guardado;
+        }
+        if (req.mode === 'navigate') {
+            try {
+                return await fetch(req);
+            } catch {
+                return guardado || cache.match('index.html');
+            }
         }
         // stale-while-revalidate: responde rápido e atualiza em segundo plano
         const rede = fetch(req).then(r => {

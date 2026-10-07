@@ -9,6 +9,8 @@ Um jogo-surpresa em formato **PWA**, feito como presente de 1 ano de namoro (09/
 - **Contrato de Overwatch** com assinatura digital e carimbo animado, exportável em PDF.
 - **PWA**: manifest, ícones, service worker com cache offline (inclui áudios).
 - **Progresso salvo**: tema, volume e pergunta atual do quiz ficam guardados no aparelho.
+- **Instalação guiada**: botão de instalação quando o navegador permite e aviso de modo offline/instalado.
+- **Mobile first**: ajustes de safe area, telas pequenas, botões com área de toque confortável e layout mais estável.
 
 ## Tecnologias
 HTML5, CSS3 (variáveis, animações, `dvh`, `prefers-reduced-motion`), JavaScript puro (sem frameworks), Service Worker, Web App Manifest, `localStorage`, canvas-confetti.
@@ -24,6 +26,11 @@ python3 -m http.server 8000
 1. *Settings → Pages → Deploy from a branch → `main` / root*.
 2. Abra a URL no tablet e use **Instalar app** / **Adicionar à tela inicial**.
 3. A cada deploy, altere `VERSAO` em `sw.js` para forçar a atualização do cache.
+
+## Caminho para aplicativo baixável
+- **Agora**: PWA instalável pelo navegador, com cache offline e tela cheia.
+- **Próximo passo simples**: publicar em GitHub Pages/Netlify para instalar no celular ou tablet.
+- **Futuro app de loja**: empacotar com Capacitor para Android/iOS mantendo este HTML/CSS/JS como base.
 
 ## Estrutura
 ```
