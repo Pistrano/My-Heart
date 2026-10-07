@@ -208,12 +208,12 @@ const perguntas = [
         resposta: "01 de Setembro de 2025" 
     },
     { 
-        pergunta: "Onde foi o nosso primeiro encontro oficial no dia do meu aniversário?", 
+        pergunta: "Onde foi o nosso primeiro encontro oficial?", 
         opcoes: ["Num restaurante chique", "Numa lanchonete na praça", "No meu aniversário, porque não tinha mais ninguém para sair comigo e você aceitou"], 
         resposta: "No meu aniversário, porque não tinha mais ninguém para sair comigo e você aceitou" 
     },
     { 
-        pergunta: "Onde foi que eu, Raphael, te pedi em namoro oficial?", 
+        pergunta: "Onde foi que eu te pedi em namoro oficial?", 
         opcoes: ["Num restaurante", "Na frente da faculdade", "No carro no seu condomínio"], 
         resposta: "No carro no seu condomínio" 
     },
@@ -238,8 +238,8 @@ const perguntas = [
         resposta: "Overwatch" 
     },
     { 
-        pergunta: "O que você mais gosta em mim?", 
-        opcoes: ["Meu humor duvidoso", "Meu sorriso", "Minha dedicação", "É simplesmente tudo"], 
+        pergunta: "O que eu mais gosto em você?", 
+        opcoes: ["Seu humor duvidoso", "Seu sorriso", "Sua dedicação", "É simplesmente tudo"], 
         resposta: "É simplesmente tudo" 
     },
     { 
@@ -334,8 +334,8 @@ function verificarResposta(escolha, correta, textoPergunta) {
             avancarPergunta();
         }
     } else {
-        if (textoPergunta === "O que você mais gosta em mim?") {
-            mensagemErro.innerText = "Sério que você acha que é só isso? Procure a resposta invisível... 👀";
+        if (textoPergunta === "O que eu mais gosto em você?") {
+            mensagemErro.innerText = "Sério que você acha que eu escolheria só isso? Procure a resposta invisível... 👀";
             
             const btnSecreto = document.getElementById('btn-secreto');
             if (btnSecreto) {
